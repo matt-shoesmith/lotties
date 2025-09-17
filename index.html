@@ -13,7 +13,6 @@
       height: 500px;
       display: inline-block;
       background-color: #222;
-
     }
   </style>
 </head>
@@ -30,9 +29,8 @@
   <div class="lottie-container"></div>
   <div class="lottie-container"></div>
 
-
   <script>
-    // JSON paths for each animation (replace with actual paths)
+    // JSON paths for each animation (replace with your actual files)
     const animationPaths = [
       'skillplan-math1-R2_ID_174.json',
       'SkillPlan-LD-Quizzes.json',
@@ -46,38 +44,36 @@
       'PFTT_Graphics_ID_46.json'
     ];
 
-    // Get all elements with the class 'lottie-container'
     const containers = document.querySelectorAll('.lottie-container');
 
     containers.forEach((container, index) => {
       const animationPath = animationPaths[index];
 
-      // Load the animation
       const animation = lottie.loadAnimation({
         container: container,
         renderer: 'svg',
-        loop: false,  // Disable the default loop
-        autoplay: false,  // Disable autoplay
+        loop: false,    // we’ll handle looping manually
+        autoplay: false,
         path: animationPath
       });
 
-      let currentFrame = 0; // Track the current frame
-      const frameRate = 1000 / 60;
-
-      // Wait for the animation to load
       animation.addEventListener('DOMLoaded', function() {
-        currentFrame = 0; // Reset to the first frame
+        let currentFrame = 0;
+        const frameDuration = 1000 / animation.frameRate; // use the fps from JSON
 
-        // Play the animation frame by frame
-        setInterval(function() {
-          if (currentFrame < animation.totalFrames) {
-            animation.goToAndStop(currentFrame, true); // Show the current frame
-            currentFrame += 1; // Move to the next frame
-          } else {
-            currentFrame = 0; // Loop back to the first frame
-            animation.goToAndStop(currentFrame, true); // Start from the first frame again
+        function playFrame() {
+          animation.goToAndStop(currentFrame, true);
+
+          currentFrame += 1;
+          if (currentFrame >= animation.totalFrames) {
+            currentFrame = 0; // loop
           }
-        }, frameRate);
+
+          // Schedule the next frame at correct speed
+          setTimeout(() => requestAnimationFrame(playFrame), frameDuration);
+        }
+
+        requestAnimationFrame(playFrame);
       });
     });
   </script>
