@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lottie Animations</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.1/lottie.min.js"></script>
+  <style>
+    body {
+      background-color: #222;
+    }
+    .lottie-container {
+      height: 500px;
+      display: inline-block;
+      background-color: #222;
+
+    }
+  </style>
+</head>
+<body>
+  <!-- Containers for Multiple Lottie Animations -->
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+  <div class="lottie-container"></div>
+
+  <script>
+    // JSON paths for each animation (replace with actual paths)
+    const animationPaths = [
+      'skillplan-math1-R2_ID_174.json',
+      'SkillPlan-LD-Quizzes.json',
+      'SkillPlan-LD-Certificates.json',
+      'SkillPlan-LD-Achievements.json',
+      'PFTT_Graphics_ID_63.json',
+      'PFTT_Graphics_ID_61.json',
+      'PFTT_Graphics_ID_58b.json',
+      'PFTT_Graphics_ID_55.json',
+      'PFTT_Graphics_ID_50.json',
+      'PFTT_Graphics_ID_47.json',
+      'PFTT_Graphics_ID_46.json'
+    ];
+
+    // Get all elements with the class 'lottie-container'
+    const containers = document.querySelectorAll('.lottie-container');
+
+    containers.forEach((container, index) => {
+      const animationPath = animationPaths[index];
+
+      // Load the animation
+      const animation = lottie.loadAnimation({
+        container: container,
+        renderer: 'svg',
+        loop: false,  // Disable the default loop
+        autoplay: false,  // Disable autoplay
+        path: animationPath
+      });
+
+      let currentFrame = 0; // Track the current frame
+      const frameRate = 1000 / 60;
+
+      // Wait for the animation to load
+      animation.addEventListener('DOMLoaded', function() {
+        currentFrame = 0; // Reset to the first frame
+
+        // Play the animation frame by frame
+        setInterval(function() {
+          if (currentFrame < animation.totalFrames) {
+            animation.goToAndStop(currentFrame, true); // Show the current frame
+            currentFrame += 1; // Move to the next frame
+          } else {
+            currentFrame = 0; // Loop back to the first frame
+            animation.goToAndStop(currentFrame, true); // Start from the first frame again
+          }
+        }, frameRate);
+      });
+    });
+  </script>
+</body>
+</html>
