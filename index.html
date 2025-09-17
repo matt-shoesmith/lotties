@@ -52,25 +52,30 @@
       const animation = lottie.loadAnimation({
         container: container,
         renderer: 'svg',
-        loop: false,    // we’ll handle looping manually
+        loop: false,
         autoplay: false,
         path: animationPath
       });
 
       animation.addEventListener('DOMLoaded', function() {
         let currentFrame = 0;
-        const frameDuration = 1000 / animation.frameRate; // use the fps from JSON
+        const fps = animation.frameRate; 
+        const frameDuration = 1000 / fps;
+        let lastTime = performance.now();
 
-        function playFrame() {
-          animation.goToAndStop(currentFrame, true);
+        function playFrame(now) {
+          const delta = now - lastTime;
 
-          currentFrame += 1;
-          if (currentFrame >= animation.totalFrames) {
-            currentFrame = 0; // loop
+          if (delta >= frameDuration) {
+            animation.goToAndStop(currentFrame, true);
+            currentFrame++;
+            if (currentFrame >= animation.totalFrames) {
+              currentFrame = 0; // loop
+            }
+            lastTime = now;
           }
 
-          // Schedule the next frame at correct speed
-          setTimeout(() => requestAnimationFrame(playFrame), frameDuration);
+          requestAnimationFrame(playFrame);
         }
 
         requestAnimationFrame(playFrame);
